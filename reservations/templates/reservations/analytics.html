@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Аналитика оборудования{% endblock %}
+
+{% block content %}
+
+<div class="container-xl py-4">
+
+    <h1 class="mb-4">Аналитика оборудования</h1>
+
+    <div id="analytics-error" class="text-danger mb-3"></div>
+
+    <div class="row row-cards mb-4">
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-secondary">
+                        Видов оборудования
+                    </div>
+                    <div class="h1" id="equipment-types">—</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-secondary">
+                        Всего единиц
+                    </div>
+                    <div class="h1" id="total-units">—</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-secondary">
+                        Доступно
+                    </div>
+                    <div class="h1" id="available-units">—</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-secondary">
+                        Занято
+                    </div>
+                    <div class="h1" id="occupied-units">—</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row row-cards">
+
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        Мои бронирования по статусам
+                    </h3>
+                </div>
+
+                <div class="card-body">
+                    <div id="status-chart"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        Самое востребованное оборудование
+                    </h3>
+                </div>
+
+                <div class="card-body">
+                    <div id="popular-equipment"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'reservations/analytics.js' %}"></script>
+{% endblock %}

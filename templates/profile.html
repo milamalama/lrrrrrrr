@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}Профиль{% endblock %}
+{% block content %}
+
+<div class="welcome-card">
+    <h1>Привет, {{ user.username }}! </h1>
+    <p class="mb-0">
+        Добро пожаловать в учебную панель управления.
+        Желаю продуктивного дня!
+    </p>
+</div>
+
+<div class="row row-cards g-4 profile-cards mt-1">
+    <div class="col-12 col-md-6 col-xl-3">
+        <a href="/profile/" class="text-reset text-decoration-none">
+            <div class="card card-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <i class="ti ti-user me-3 fs-2 profile-icon-pink"></i>
+                        <div>
+                            <div class="fw-bold">Профиль</div>
+                            <div class="text-secondary">Мой аккаунт</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-3">
+        <a href="/departments/" class="text-reset text-decoration-none">
+            <div class="card card-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <i class="ti ti-building me-3 fs-2 text-green"></i>
+                        <div>
+                            <div class="fw-bold">Факультеты</div>
+                            <div class="text-secondary">Структура вуза</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-3">
+        <a href="/groups/" class="text-reset text-decoration-none">
+            <div class="card card-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <i class="ti ti-users me-3 fs-2 text-yellow"></i>
+                        <div>
+                            <div class="fw-bold">Группы</div>
+                            <div class="text-secondary">Учебные группы</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-3">
+        <a href="/courses/" class="text-reset text-decoration-none">
+            <div class="card card-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <i class="ti ti-book me-3 fs-2 text-purple"></i>
+                        <div>
+                            <div class="fw-bold">Курсы</div>
+                            <div class="text-secondary">Учебные дисциплины</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="user-info mt-5">
+    <h1>Профиль пользователя</h1>
+    <p>Имя пользователя: <strong>{{ user.username }}</strong></p>
+    <p>Статус:
+        {% if user.is_superuser %}
+            <span class="badge text-bg-danger">Администратор</span>
+        {% elif is_methodist %}
+            <span class="badge text-bg-success">Методист</span>
+        {% else %}
+            <span class="badge text-bg-secondary">Пользователь</span>
+        {% endif %}
+    </p>
+</div>
+{% endblock %}

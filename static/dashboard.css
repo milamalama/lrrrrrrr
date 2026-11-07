@@ -1,0 +1,7 @@
+.dash-stat{border-top:3px solid #e9a8c4;background:#fffafc}
+.dash-chart{height:340px;position:relative}
+.dash-search{max-width:260px}
+#department-filter{min-width:220px;max-width:360px}
+#dashboard-root .card{border-radius:12px}
+#dashboard-root .card-header{background:#fff7fa}
+@media(max-width:600px){.dash-chart{height:260px}.dash-search{max-width:100%;width:100%}}

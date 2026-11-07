@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Бронирование оборудования
+{% endblock %}
+
+{% block content %}
+
+<div class="container-xl py-4">
+
+    <h1 class="mb-4">Бронирование оборудования</h1>
+
+    <div id="message" class="mb-3"></div>
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+            <h3 class="card-title">Создать бронирование</h3>
+        </div>
+
+        <div class="card-body">
+
+            <form id="reservation-form">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="equipment-search" class="form-label">
+                        Поиск оборудования
+                    </label>
+
+                    <input
+                        type="text"
+                        id="equipment-search"
+                        class="form-control"
+                        placeholder="Например, ноутбук или проектор"
+                    >
+                </div>
+
+                <div class="mb-3">
+                    <label for="category-filter" class="form-label">
+                        Категория оборудования
+                    </label>
+
+                    <select
+                        id="category-filter"
+                        class="form-select"
+                    >
+                        <option value="">Все категории</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="equipment" class="form-label">
+                        Выберите оборудование
+                    </label>
+
+                    <select
+                        id="equipment"
+                        class="form-select"
+                        required
+                    ></select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="quantity" class="form-label">
+                        Количество
+                    </label>
+
+                    <input
+                        id="quantity"
+                        type="number"
+                        class="form-control"
+                        min="1"
+                        value="1"
+                        required
+                    >
+                </div>
+
+                <button
+                    type="submit"
+                    id="create-reservation-btn"
+                    class="btn btn-primary"
+                >
+                    Создать бронирование
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+            <h3 class="card-title">Мои бронирования</h3>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row mb-3">
+
+                <div class="col-md-6 mb-2">
+                    <label for="status-filter" class="form-label">
+                        Фильтр по статусу
+                    </label>
+
+                    <select
+                        id="status-filter"
+                        class="form-select"
+                    >
+                        <option value="">Все статусы</option>
+                        <option value="created">Создана</option>
+                        <option value="confirmed">Подтверждена</option>
+                        <option value="completed">Завершена</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <label for="equipment-filter" class="form-label">
+                        Фильтр по оборудованию
+                    </label>
+
+                    <select
+                        id="equipment-filter"
+                        class="form-select"
+                    >
+                        <option value="">Всё оборудование</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- Список заполняется через JavaScript -->
+            <div id="reservation-list">
+                Загрузка бронирований...
+            </div>
+
+        </div>
+    </div>
+
+    <!-- История событий -->
+    <div class="card mb-4">
+
+        <div class="card-header">
+            <h3 class="card-title">История событий</h3>
+        </div>
+
+        <div class="card-body">
+
+            <div id="history">
+                Выберите бронирование для просмотра истории.
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'reservations/app.js' %}?v=10"></script>
+{% endblock %}

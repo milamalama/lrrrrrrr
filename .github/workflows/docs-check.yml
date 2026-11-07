@@ -1,0 +1,51 @@
+name: Documentation and Django checks
+
+on: [push, pull_request]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check documentation files
+        run: |
+          test -s README.md
+          test -s docs/architecture.md
+          test -s docs/database.md
+          test -s docs/api.md
+          test -s docs/deployment.md
+          test -s docs/troubleshooting.md
+          test -s .env.example
+
+      - name: Django system check
+        env:
+          DJANGO_SECRET_KEY: ci-only-test-key-not-for-production
+          DJANGO_DEBUG: 'False'
+          DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+        run: python manage.py check
+
+      - name: Validate OpenAPI schema
+        env:
+          DJANGO_SECRET_KEY: ci-only-test-key-not-for-production
+          DJANGO_DEBUG: 'False'
+          DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+        run: python manage.py spectacular --file schema.yml --validate --fail-on-warn
+
+      - name: Run tests
+        env:
+          DJANGO_SECRET_KEY: ci-only-test-key-not-for-production
+          DJANGO_DEBUG: 'False'
+          DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+        run: python manage.py test

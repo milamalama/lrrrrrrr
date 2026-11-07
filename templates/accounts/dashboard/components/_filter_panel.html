@@ -1,0 +1,49 @@
+
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row g-3 align-items-end">
+
+            <!-- Выбор факультета -->
+            <div class="col-12 col-md-5">
+                <label for="department-filter"
+                       class="form-label">
+                    Факультет
+                </label>
+
+                <select id="department-filter"
+                        class="form-select">
+                    <option value="">
+                        Все факультеты
+                    </option>
+
+                    {% for department in departments %}
+                        <option value="{{ department.id }}">
+                            {{ department.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Кнопка обновления -->
+            <div class="col-12 col-md-auto">
+                <button type="button"
+                        id="refresh-dashboard"
+                        class="btn btn-primary w-100">
+                    <i class="ti ti-refresh me-2"></i>
+                    Обновить
+                </button>
+            </div>
+
+            <!-- Время обновления -->
+            <div class="col-12 col-md">
+                <div class="text-secondary text-md-end">
+                    <i class="ti ti-clock me-1"></i>
+                    <span id="dashboard-status">
+                        Данные обновлены: —
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

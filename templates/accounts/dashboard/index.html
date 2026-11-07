@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Стили аналитического раздела -->
+<link rel="stylesheet" href="{% static 'dashboard.css' %}">
+<div class="container-xl py-4"
+     id="dashboard-root"
+     data-api="{% url 'dashboard_api' %}"
+     data-section="{{ section }}">
+
+    <!-- Заголовок -->
+    <div class="d-flex justify-content-between
+                align-items-center flex-wrap gap-2 mb-3">
+
+        <div>
+            <h1 class="mb-1">
+                Аналитика учебного портала
+            </h1>
+
+            <p class="text-secondary mb-0">
+                Показатели рассчитываются из базы данных Django
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Навигация между дашбордами -->
+    <div class="d-flex flex-wrap gap-2 mb-3">
+
+        <a href="{% url 'dashboard_overview' %}"
+           class="btn {% if section == 'overview' %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+            Обзор
+        </a>
+
+        <a href="{% url 'dashboard_departments' %}"
+           class="btn {% if section == 'departments' %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+            Факультеты
+        </a>
+
+        <a href="{% url 'dashboard_groups' %}"
+           class="btn {% if section == 'groups' %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+            Учебные группы
+        </a>
+
+    </div>
+
+    <!-- Фильтр факультетов и кнопка обновления -->
+    {% include 'accounts/dashboard/components/_filter_panel.html' %}
+
+    <!-- Основные показатели -->
+    <div class="row g-3 mb-3">
+
+        {% include 'accounts/dashboard/components/_stat_card.html' with label='Факультеты' key='departments' %}
+
+        {% include 'accounts/dashboard/components/_stat_card.html' with label='Курсы' key='courses' %}
+
+        {% include 'accounts/dashboard/components/_stat_card.html' with label='Группы' key='groups' %}
+
+        {% include 'accounts/dashboard/components/_stat_card.html' with label='Студенты' key='students' %}
+
+    </div>
+
+    <!-- Дополнительные аналитические показатели -->
+    <div class="row g-3 mb-3">
+
+        <!-- Средняя численность группы -->
+        <div class="col-12 col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="text-secondary mb-2">
+                        Средняя численность группы
+                    </div>
+
+                    <div class="h2 mb-0" id="stat-average">
+                        —
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Самая многочисленная группа -->
+        <div class="col-12 col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="text-secondary mb-2">
+                        Самая многочисленная группа
+                    </div>
+
+                    <div class="h3 mb-1"
+                         id="stat-largest-group">
+                        —
+                    </div>
+
+                    <div class="text-secondary"
+                         id="stat-largest-group-count">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Факультет-лидер по студентам -->
+        <div class="col-12 col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="text-secondary mb-2">
+                        Факультет с наибольшим числом студентов
+                    </div>
+
+                    <div class="h3 mb-1"
+                         id="stat-top-department">
+                        —
+                    </div>
+
+                    <div class="text-secondary"
+                         id="stat-top-department-count">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Основные диаграммы -->
+    <div class="row g-3 mb-3">
+
+        {% if section == 'overview' %}
+
+            <!-- Дашборд №1: Обзор -->
+            {% include 'accounts/dashboard/components/_chart_card.html' with title='Курсы по факультетам' chart_id='chart-one' %}
+
+            {% include 'accounts/dashboard/components/_chart_card.html' with title='Группы по факультетам' chart_id='chart-two' %}
+
+        {% elif section == 'departments' %}
+
+            <!-- Дашборд №2: Факультеты -->
+            {% include 'accounts/dashboard/components/_chart_card.html' with title='Сравнение факультетов: курсы и группы' chart_id='chart-one' %}
+
+            {% include 'accounts/dashboard/components/_chart_card.html' with title='Доля учебных групп по факультетам' chart_id='chart-two' %}
+
+        {% else %}
+
+            <!-- Дашборд №3: Учебные группы -->
+            {% include 'accounts/dashboard/components/_chart_card.html' with title='Численность учебных групп' chart_id='chart-one' %}
+
+            {% include 'accounts/dashboard/components/_chart_card.html' with title='Группы по факультетам' chart_id='chart-two' %}
+
+        {% endif %}
+
+    </div>
+
+    <!-- Дополнительная диаграмма -->
+    <div class="row g-3 mb-3">
+
+        {% include 'accounts/dashboard/components/_chart_card.html' with title='Студенты по факультетам' chart_id='chart-students' %}
+
+    </div>
+
+    <!-- Подробная таблица -->
+    <div class="card">
+
+        <div class="card-header d-flex flex-wrap
+                    align-items-center justify-content-between gap-2">
+
+            <h3 class="card-title" id="table-title">
+                Подробные данные
+            </h3>
+
+            <!-- Поиск по таблице -->
+            <input
+                type="text"
+                id="dashboard-search"
+                class="form-control dash-search"
+                placeholder="Поиск по таблице"
+                aria-label="Поиск по таблице"
+            >
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-vcenter
+                          table-hover card-table">
+
+                <thead id="dashboard-table-head">
+                </thead>
+
+                <tbody id="dashboard-table-body">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+
+<script src="{% static 'dashboard.js' %}?v=4"></script>
+
+{% endblock %}
