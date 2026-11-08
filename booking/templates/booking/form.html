@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Бронирование оборудования — Aether Booking</title>
+  <link rel="stylesheet" href="{% static 'booking/style.css' %}">
+</head>
+<body>
+<main class="shell">
+  <header class="topbar"><a class="brand" href="{% url 'reservation_list' %}">✧ AETHER BOOKING</a><span class="userpill">{{ request.user.username }}</span></header>
+  <section class="form-panel panel">
+    <div class="eyebrow">Оборудование · Выбор времени</div>
+    <h1>Бронирование оборудования</h1>
+    {% if form.errors %}<div class="notice">Не удалось сохранить бронирование. Проверьте введённые данные.</div>{% endif %}
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn btn-primary" type="submit">Сохранить бронирование</button>
+    </form>
+    <a class="back" href="{% url 'reservation_list' %}">← Вернуться к списку</a>
+  </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Вход — Aether Booking</title>
+  <link rel="stylesheet" href="{% static 'booking/style.css' %}">
+</head>
+<body>
+<main class="login-shell">
+  <div class="brand">✧ AETHER BOOKING</div>
+  <section class="panel form-panel">
+    <div class="eyebrow">Добро пожаловать</div>
+    <h1>Вход в систему</h1>
+    {% if form.errors %}<div class="notice">Неверный логин или пароль. Попробуйте ещё раз.</div>{% endif %}
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="hidden" name="next" value="{{ next }}">
+      <button class="btn btn-primary" type="submit">Войти</button>
+    </form>
+  </section>
+</main>
+</body>
+</html>

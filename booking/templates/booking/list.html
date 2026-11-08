@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Мои бронирования — Aether Booking</title>
+  <link rel="stylesheet" href="{% static 'booking/style.css' %}">
+</head>
+<body>
+<main class="shell">
+  <header class="topbar">
+    <a class="brand" href="{% url 'reservation_list' %}">✧ AETHER BOOKING</a>
+    <div class="userbox">
+      <span class="userpill">{{ request.user.username }}</span>
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-soft">Выйти</button>
+      </form>
+    </div>
+  </header>
+  <section class="hero">
+    <div class="eyebrow">Лабораторная работа №1 · Django</div>
+    <h1>Мои бронирования</h1>
+    <p>Выбирайте оборудование и управляйте временем использования в одном месте.</p>
+  </section>
+  <section class="panel">
+    <h2>Фильтр бронирований</h2>
+    <form method="get" class="filter-form">
+      <div class="field">
+        <label for="equipment">Оборудование</label>
+        <select name="equipment" id="equipment">
+          <option value="">Все устройства</option>
+          {% for equipment in equipment_list %}
+          <option value="{{ equipment.pk }}" {% if selected_equipment == equipment.pk|stringformat:"s" %}selected{% endif %}>
+            {{ equipment.name }} ({{ equipment.inventory_number }})
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Применить</button>
+      <a class="btn btn-soft" href="{% url 'reservation_list' %}">Сбросить</a>
+    </form>
+  </section>
+  <div class="toolbar">
+    <h2>Ваши записи</h2>
+    <a class="btn btn-primary" href="{% url 'reservation_create' %}">＋ Создать бронирование</a>
+  </div>
+  <section class="cards">
+    {% for item in items %}
+    <article class="booking-card">
+      <div class="card-top">
+        <div>
+          <h3>{{ item.equipment.name }}</h3>
+          <div class="inventory">Инвентарный № {{ item.equipment.inventory_number }}</div>
+        </div>
+        {% if item.confirmed %}
+        <span class="badge">Подтверждено</span>
+        {% else %}
+        <span class="badge cancelled">Отменено</span>
+        {% endif %}
+      </div>
+      <div class="details">
+        <div><span>Начало</span>{{ item.start|date:"d.m.Y H:i" }}</div>
+        <div><span>Окончание</span>{{ item.end|date:"d.m.Y H:i" }}</div>
+        <div><span>Цель</span>{{ item.purpose }}</div>
+      </div>
+      <div class="actions">
+        <a class="btn btn-soft" href="{% url 'reservation_edit' item.pk %}">Изменить</a>
+        {% if item.confirmed %}
+        <form method="post" action="{% url 'reservation_cancel' item.pk %}">
+          {% csrf_token %}
+          <button class="btn btn-mint" type="submit">Отменить</button>
+        </form>
+        {% endif %}
+        <form method="post" action="{% url 'reservation_delete' item.pk %}">
+          {% csrf_token %}
+          <button class="btn btn-danger" type="submit">Удалить</button>
+        </form>
+      </div>
+    </article>
+    {% empty %}
+    <div class="panel empty">
+      <h3>Бронирований пока нет</h3>
+      <p>Выберите другое оборудование или создайте новую запись.</p>
+    </div>
+    {% endfor %}
+  </section>
+  <footer class="footer">Aether Booking · Учебный проект Django</footer>
+</main>
+</body>
+</html>
