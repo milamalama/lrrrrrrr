@@ -1,1 +1,0 @@
-{% extends 'base.html' %}{% block content %}<h1>История моих действий</h1><ul>{% for event in events %}<li>{{ event.created_at|date:'d.m.Y H:i' }} — бронь №{{ event.reservation_number }}: {{ event.action }}</li>{% empty %}<li>Действий пока нет.</li>{% endfor %}</ul><a href="{% url 'booking:list' %}">К списку</a>{% endblock %}
